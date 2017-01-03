@@ -21,18 +21,35 @@ public class Game extends Canvas implements Runnable {
 	private Thread thread;
 
 	private Handler handler;
+	private HUD hud;
 
 	private Random r;
 
 	public Game() {
 		r = new Random();
 		this.handler = new Handler();
+		this.hud=new HUD();
 
 		new Window(WIDTH, HEIGHT, "Tetris", this);
 
-		for (int i = 0; i < 10; i++) {
-			handler.addObject(new Tetrimino(r.nextInt(WIDTH), r.nextInt(HEIGHT), Color.cyan, 1, Type.I));
+		Tetrimino chosen =randomTetrimino();
+		handler.addObject(chosen);
+		this.addKeyListener(new KeyInput(chosen));
+		
+	}
+
+	public Tetrimino randomTetrimino() {
+		Type type = Type.values()[r.nextInt(5)];
+		return new Tetrimino(WIDTH/2, 0, 1, type);
+	}
+
+	public static int clamp(int var, int min, int max) {
+		if (var >= max) {
+			return var = max;
+		} else if (var <= min) {
+			return var = min;
 		}
+		return var;
 	}
 
 	public synchronized void start() {
@@ -94,6 +111,7 @@ public class Game extends Canvas implements Runnable {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		handler.render(g);
+		hud.render(g);
 
 		g.dispose();
 		bs.show();
@@ -101,7 +119,7 @@ public class Game extends Canvas implements Runnable {
 
 	private void tick() {
 		handler.tick();
-
+		hud.tick();
 	}
 
 	public static void main(String[] args) {

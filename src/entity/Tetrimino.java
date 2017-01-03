@@ -1,15 +1,16 @@
 package entity;
 
-import java.awt.Color;
 import java.awt.Graphics;
+
+import gui.Game;
 
 public class Tetrimino extends GameObject {
 
 	private Block[] blocks;
 	private Type type;
 
-	public Tetrimino(int x, int y, Color color, int vel, Type type) {
-		super(x, y, color, vel, y, vel);
+	public Tetrimino(int x, int y, int vel, Type type) {
+		super(x, y, type.getColor(), vel, y, vel);
 		this.blocks = new Block[4];
 		this.type = type;
 		buildBlocks();
@@ -32,39 +33,75 @@ public class Tetrimino extends GameObject {
 	private void buildBlocks() {
 		switch (type) {
 		case Cube:
-			blocks[0]=new Block(x,y,color, vel);
-			blocks[1]=new Block(x+Block.width,y,color, vel);
-			blocks[2]=new Block(x,y+Block.height,color, vel);
-			blocks[3]=new Block(x+Block.width,y+Block.height,color, vel);
+			createCube();
 			break;
 		case L:
-			blocks[0]=new Block(x,y,color, vel);
-			blocks[1]=new Block(x,y+Block.height,color, vel);
-			blocks[2]=new Block(x,y+2*Block.height,color, vel);
-			blocks[3]=new Block(x+Block.width,y+2*Block.height,color, vel);
+			createL();
 			break;
 		case I:
-			blocks[0]=new Block(x,y,color, vel);
-			blocks[1]=new Block(x,y+Block.height,color, vel);
-			blocks[2]=new Block(x,y+2*Block.height,color, vel);
-			blocks[3]=new Block(x,y+3*Block.height,color, vel);
+			createI();
 			break;
 		case T:
-			blocks[0]=new Block(x,y,color, vel);
-			blocks[1]=new Block(x-Block.width,y+Block.height,color, vel);
-			blocks[2]=new Block(x,y+Block.height,color, vel);
-			blocks[3]=new Block(x+Block.width,y+Block.height,color, vel);
+			createT();
 			break;
 		case Z:
-			blocks[0]=new Block(x,y,color, vel);
-			blocks[1]=new Block(x+Block.width,y,color, vel);
-			blocks[2]=new Block(x+Block.width,y+Block.height,color, vel);
-			blocks[3]=new Block(x+2*Block.width,y+Block.height,color, vel);
+			createZ();
 			break;
 		default:
 			break;
 		}
 
+	}
+
+	private void createZ() {
+		blocks[0] = new Block(x, y, color, vel);
+		blocks[1] = new Block(x + Block.width, y, color, vel);
+		blocks[2] = new Block(x + Block.width, y + Block.height, color, vel);
+		blocks[3] = new Block(x + 2 * Block.width, y + Block.height, color, vel);
+	}
+
+	private void createT() {
+		blocks[0] = new Block(x, y, color, vel);
+		blocks[1] = new Block(x - Block.width, y + Block.height, color, vel);
+		blocks[2] = new Block(x, y + Block.height, color, vel);
+		blocks[3] = new Block(x + Block.width, y + Block.height, color, vel);
+	}
+
+	private void createI() {
+		blocks[0] = new Block(x, y, color, vel);
+		blocks[1] = new Block(x, y + Block.height, color, vel);
+		blocks[2] = new Block(x, y + 2 * Block.height, color, vel);
+		blocks[3] = new Block(x, y + 3 * Block.height, color, vel);
+	}
+
+	private void createL() {
+		blocks[0] = new Block(x, y, color, vel);
+		blocks[1] = new Block(x, y + Block.height, color, vel);
+		blocks[2] = new Block(x, y + 2 * Block.height, color, vel);
+		blocks[3] = new Block(x + Block.width, y + 2 * Block.height, color, vel);
+	}
+
+	private void createCube() {
+		blocks[0] = new Block(x, y, color, vel);
+		blocks[1] = new Block(x + Block.width, y, color, vel);
+		blocks[2] = new Block(x, y + Block.height, color, vel);
+		blocks[3] = new Block(x + Block.width, y + Block.height, color, vel);
+	}
+	
+	public void moveLeft() {
+		if (this.x>=Block.width) {
+			for (int i=0;i<blocks.length;i++) {
+				blocks[i].moveLeft();
+			}
+		}
+	}
+	
+	public void moveRight() {
+		if (this.x<=Game.WIDTH-Block.width) {
+			for (int i=0;i<blocks.length;i++) {
+				blocks[i].moveRight();
+			}
+		}
 	}
 
 }
