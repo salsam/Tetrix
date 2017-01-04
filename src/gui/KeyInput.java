@@ -3,13 +3,11 @@ package gui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import entity.Tetrimino;
-
 public class KeyInput extends KeyAdapter {
-	private Tetrimino chosen;
+	private Handler handler;
 
-	public KeyInput(Tetrimino chosen) {
-		this.chosen = chosen;
+	public KeyInput(Handler handler) {
+		this.handler = handler;
 	}
 
 	@Override
@@ -17,26 +15,17 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			chosen.moveLeft();
+			if (handler.getChosen().canMoveLeft()) {
+				handler.getChosen().moveLeft();
+			}
 		} else if (key == KeyEvent.VK_RIGHT) {
-			chosen.moveRight();
+			if (handler.getChosen().canMoveRight()) {
+				handler.getChosen().moveRight();
+			}
 		} else if (key == KeyEvent.VK_DOWN) {
-			chosen.setVel(Game.HEIGHT);
-		} else if (key == KeyEvent.VK_ESCAPE) {
-			System.exit(1);
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-		
-		if (key == KeyEvent.VK_LEFT) {
-			chosen.moveLeft();
-		} else if (key == KeyEvent.VK_RIGHT) {
-			chosen.moveRight();
-		} else if (key == KeyEvent.VK_DOWN) {
-			chosen.setVel(Game.HEIGHT);
+			while (handler.getChosen().canMoveDown()) {
+				handler.getChosen().moveDown();
+			}
 		} else if (key == KeyEvent.VK_ESCAPE) {
 			System.exit(1);
 		}

@@ -5,20 +5,24 @@ import java.awt.Graphics;
 
 public abstract class GameObject {
 	protected int x, y;
-	protected int width, height;
+	protected boolean moving;
 	protected Color color;
-	protected int vel;
 
-	public GameObject(int x, int y, Color color, int vel, int width, int height) {
+	public GameObject(int x, int y, Color color) {
 		this.x = x;
 		this.y = y;
 		this.color = color;
-		this.vel = vel;
-		this.width = width;
-		this.height = height;
+		moving = false;
 	}
 
+	public abstract void moveDown();
+
+	public abstract void moveLeft();
+
+	public abstract void moveRight();
+
 	public abstract void render(Graphics g);
+
 	public abstract void tick();
 
 	public int getX() {
@@ -45,11 +49,12 @@ public abstract class GameObject {
 		this.color = color;
 	}
 
-	public int getVel() {
-		return vel;
+	public boolean isMoving() {
+		return moving;
 	}
 
-	public void setVel(int vel) {
-		this.vel = vel;
+	public void setMoving(boolean moving) {
+		this.moving = moving;
 	}
+
 }

@@ -3,7 +3,7 @@ package entity;
 import java.awt.Color;
 
 public enum Type {
-	Cube(Color.yellow), L(Color.orange), I(Color.cyan), T(Color.magenta), Z(Color.green);
+	Cube(Color.yellow), L(Color.orange), I(Color.cyan), T(Color.blue), Z(Color.green);
 
 	private Color color;
 

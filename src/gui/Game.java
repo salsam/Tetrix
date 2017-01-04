@@ -6,8 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
-import entity.Tetrimino;
-import entity.Type;
+import logic.Spawn;
 
 public class Game extends Canvas implements Runnable {
 
@@ -22,34 +21,21 @@ public class Game extends Canvas implements Runnable {
 
 	private Handler handler;
 	private HUD hud;
+	private Spawn spawner;
 
 	private Random r;
 
 	public Game() {
 		r = new Random();
-		this.handler = new Handler();
-		this.hud=new HUD();
+		handler = new Handler();
+		hud = new HUD();
+		spawner = new Spawn(handler);
+		
+		spawner.spawn();
+
+		this.addKeyListener(new KeyInput(handler));
 
 		new Window(WIDTH, HEIGHT, "Tetris", this);
-
-		Tetrimino chosen =randomTetrimino();
-		handler.addObject(chosen);
-		this.addKeyListener(new KeyInput(chosen));
-		
-	}
-
-	public Tetrimino randomTetrimino() {
-		Type type = Type.values()[r.nextInt(5)];
-		return new Tetrimino(WIDTH/2, 0, 1, type);
-	}
-
-	public static int clamp(int var, int min, int max) {
-		if (var >= max) {
-			return var = max;
-		} else if (var <= min) {
-			return var = min;
-		}
-		return var;
 	}
 
 	public synchronized void start() {
@@ -71,7 +57,7 @@ public class Game extends Canvas implements Runnable {
 	public void run() {
 		this.requestFocus();
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60.0;
+		double amountOfTicks = 1.0;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
@@ -120,6 +106,10 @@ public class Game extends Canvas implements Runnable {
 	private void tick() {
 		handler.tick();
 		hud.tick();
+		
+		if (!handler.getChosen().isMoving()) {
+			spawner.spawn();
+		}
 	}
 
 	public static void main(String[] args) {
