@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
+import entity.Block;
 import logic.Spawn;
 
 public class Game extends Canvas implements Runnable {
@@ -15,6 +16,7 @@ public class Game extends Canvas implements Runnable {
 	 */
 	private static final long serialVersionUID = 242446397740476223L;
 	public static final int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
+	public static final int HUDWIDTH = (WIDTH - 10 * Block.width) / 2;
 
 	private boolean running = false;
 	private Thread thread;
@@ -30,7 +32,7 @@ public class Game extends Canvas implements Runnable {
 		handler = new Handler();
 		hud = new HUD();
 		spawner = new Spawn(handler);
-		
+
 		spawner.spawn();
 
 		this.addKeyListener(new KeyInput(handler));
@@ -77,7 +79,7 @@ public class Game extends Canvas implements Runnable {
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				System.out.println("FPS: " + frames);
+				//System.out.println("FPS: " + frames);
 				frames = 0;
 			}
 		}
@@ -93,8 +95,11 @@ public class Game extends Canvas implements Runnable {
 
 		Graphics g = bs.getDrawGraphics();
 
-		g.setColor(Color.black);
+		g.setColor(Color.gray);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+
+		g.setColor(Color.black);
+		g.fillRect(HUDWIDTH, 0, 10 * Block.width, HEIGHT);
 
 		handler.render(g);
 		hud.render(g);
@@ -106,7 +111,7 @@ public class Game extends Canvas implements Runnable {
 	private void tick() {
 		handler.tick();
 		hud.tick();
-		
+
 		if (!handler.getChosen().isMoving()) {
 			spawner.spawn();
 		}

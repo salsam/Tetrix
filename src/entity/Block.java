@@ -7,7 +7,7 @@ import gui.Game;
 import gui.Handler;
 
 public class Block extends GameObject {
-	public static final int width = 16, height = 16;
+	public static final int width = 24, height = 24;
 	private Handler handler;
 
 	public Block(int x, int y, Color color, Handler handler) {
@@ -48,7 +48,7 @@ public class Block extends GameObject {
 	}
 
 	public boolean canMoveLeft(Tetrimino t) {
-		if (!moving || x <= 0) {
+		if (!moving || x <= Game.HUDWIDTH) {
 			return false;
 		}
 
@@ -60,7 +60,7 @@ public class Block extends GameObject {
 	}
 
 	public boolean canMoveRight(Tetrimino t) {
-		if (!moving || x >= Game.WIDTH - width) {
+		if (!moving || x >= Game.WIDTH - Game.HUDWIDTH - width) {
 			return false;
 		}
 
@@ -72,15 +72,15 @@ public class Block extends GameObject {
 	}
 
 	private boolean isAbove(Block b) {
-		return b.getY() == y + height;
+		return (b.getX() == x) && (b.getY() == y + height);
 	}
 
 	private boolean isRightOf(Block b) {
-		return b.getX() == x - width;
+		return (b.getY() == y) && (b.getX() == x - width);
 	}
 
 	private boolean isLeftOf(Block b) {
-		return b.getX() == x + width;
+		return (b.getY() == y) && (b.getX() == x + width);
 	}
 
 	private boolean isAboveTetrimino(Tetrimino tet) {
